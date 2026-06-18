@@ -908,47 +908,27 @@ async function submitForm() {
   submitBtn.disabled = true;
 
   try {
-    // Submit to Netlify Forms (central data collection)
-    const netlifyFd = new FormData(form);
+    // Submit to Netlify Forms using URLSearchParams (most compatible)
+    const body = new URLSearchParams(new FormData(form)).toString();
     const resp = await fetch('/', {
       method: 'POST',
-      headers: { 'Accept': 'application/json' },
-      body: netlifyFd
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json'
+      },
+      body: body
     });
 
     if (resp.ok) {
-      // Also generate CSV for local backup
-      const fields = ['name','project','plate','version','productType','chassis','driveDuration','dailyHours'];
-      for (let i=1; i<=61; i++) fields.push('q'+i);
-      fields.push('q45_other');
-
-      let csv = '﻿' + fields.join(',') + '\n';
-      const row = fields.map(f => {
-        let val = data[f];
-        if (Array.isArray(val)) val = val.join(';');
-        if (!val) val = '';
-        val = String(val).replace(/"/g, '""').replace(/\n/g, ' ');
-        return '"' + val + '"';
-      });
-      csv += row.join(',');
-
-      // Download CSV as backup
-      const blob = new Blob([csv], {type: 'text/csv;charset=utf-8'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'T18_调查_' + (data['name'] || 'unknown') + '_' + new Date().toISOString().slice(0,10) + '.csv';
-      a.click();
-      URL.revokeObjectURL(url);
-
       localStorage.removeItem(DRAFT_KEY);
       showToast('✅ 提交成功！感谢您的反馈');
       form.reset();
       updateProgress();
     } else {
-      throw new Error('Submit failed');
+      throw new Error('Submit failed: ' + resp.status);
     }
   } catch(e) {
+    console.error('Netlify submit error:', e);
     // Fallback: download CSV locally
     const fields = ['name','project','plate','version','productType','chassis','driveDuration','dailyHours'];
     for (let i=1; i<=61; i++) fields.push('q'+i);
@@ -975,7 +955,7 @@ async function submitForm() {
     const textReport = buildTextReport(data);
     navigator.clipboard?.writeText(textReport).catch(()=>{});
     localStorage.removeItem(DRAFT_KEY);
-    showToast('⚠️ 在线提交异常，CSV已下载\n请将文件发给项目经理汇总');
+    showToast('⚠️ 提交部分成功，CSV已下载\n请将文件转发给项目经理汇总');
   }
 
   submitBtn.textContent = '📤 提交问卷';
