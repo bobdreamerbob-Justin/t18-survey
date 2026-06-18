@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>T18泰坦洗扫车使用层面问题调查</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: #f5f5f5; color: #333; font-size: 15px; line-height: 1.6;
+  padding-bottom: 80px;
+}
+.header {
+  background: linear-gradient(135deg, #1a73e8, #1557b0);
+  color: #fff; padding: 24px 16px; text-align: center;
+  position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,.15);
+}
+.header h1 { font-size: 18px; margin-bottom: 4px; }
+.header p { font-size: 13px; opacity: .85; }
+.section {
+  background: #fff; margin: 12px 8px; border-radius: 12px;
+  padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,.08);
+}
+.section-title {
+  font-size: 16px; font-weight: 700; color: #1a73e8;
+  margin-bottom: 12px; padding-bottom: 8px;
+  border-bottom: 2px solid #e8f0fe; display: flex; align-items: center; gap: 8px;
+}
+.section-title .icon { font-size: 20px; }
+.form-group { margin-bottom: 14px; }
+.form-group:last-child { margin-bottom: 0; }
+label {
+  display: block; font-weight: 600; margin-bottom: 6px;
+  color: #444; font-size: 14px;
+}
+label .required { color: #e74c3c; margin-left: 2px; }
+input[type="text"], textarea, select {
+  width: 100%; padding: 10px 12px; border: 1px solid #ddd;
+  border-radius: 8px; font-size: 15px; font-family: inherit;
+  background: #fafafa; transition: border-color .2s;
+}
+input[type="text"]:focus, textarea:focus, select:focus {
+  outline: none; border-color: #1a73e8; background: #fff;
+}
+textarea { min-height: 80px; resize: vertical; }
+.radio-group, .checkbox-group {
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
+.radio-item, .checkbox-item {
+  display: flex; align-items: center; gap: 4px;
+  padding: 8px 12px; border: 1px solid #ddd; border-radius: 20px;
+  font-size: 13px; cursor: pointer; transition: all .2s;
+  background: #fafafa; user-select: none;
+}
+.radio-item:has(input:checked), .checkbox-item:has(input:checked) {
+  background: #e8f0fe; border-color: #1a73e8; color: #1a73e8; font-weight: 600;
+}
+.radio-item input, .checkbox-item input { display: none; }
+.rating-group { display: flex; justify-content: space-between; gap: 4px; }
+.rating-item {
+  flex: 1; text-align: center; padding: 8px 2px;
+  border: 1px solid #ddd; border-radius: 8px; font-size: 12px;
+  cursor: pointer; transition: all .2s; background: #fafafa;
+}
+.rating-item:has(input:checked) {
+  background: #1a73e8; color: #fff; border-color: #1a73e8; font-weight: 700;
+}
+.rating-item input { display: none; }
+table.info-table { width: 100%; border-collapse: collapse; }
+table.info-table td {
+  padding: 6px 4px; font-size: 13px; vertical-align: top;
+}
+table.info-table td:first-child { font-weight: 600; color: #444; width: 30%; white-space: nowrap; }
+table.info-table input, table.info-table select { font-size: 13px; padding: 6px 8px; }
+.submit-bar {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: #fff; padding: 12px 16px; box-shadow: 0 -2px 8px rgba(0,0,0,.1);
+  display: flex; gap: 10px; z-index: 100;
+}
+.btn {
+  flex: 1; padding: 12px; border: none; border-radius: 10px;
+  font-size: 16px; font-weight: 700; cursor: pointer; transition: opacity .2s;
+}
+.btn:active { opacity: .8; }
+.btn-primary { background: #1a73e8; color: #fff; }
+.btn-secondary { background: #f0f0f0; color: #555; }
+.progress { font-size: 12px; color: #999; text-align: center; margin-top: 4px; }
+.toast {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  background: rgba(0,0,0,.8); color: #fff; padding: 16px 32px;
+  border-radius: 12px; font-size: 16px; z-index: 999; display: none;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🚛 T18泰坦洗扫车</h1>
+  <p>使用层面问题调查</p>
+</div>
+
+<form id="surveyForm">
+
+<!-- ====== 一、基本信息 ====== -->
+<div class="section">
+  <div class="section-title"><span class="icon">📋</span>一、基本信息</div>
+
+  <div class="form-group">
+    <label>姓名 <span class="required">*</span></label>
+    <input type="text" name="name" required placeholder="请输入您的姓名">
+  </div>
+
+  <div class="form-group">
+    <label>所属项目 <span class="required">*</span></label>
+    <select name="project" required>
+      <option value="">请选择</option>
+      <option>横琴</option><option>义乌</option><option>珠海</option>
+      <option>西安</option><option>新余</option><option>繁昌</option>
+      <option>永康</option><option>成都</option><option>远香湖</option>
+      <option>台州</option><option>鸠江</option><option>深圳-坪山</option>
+      <option>深圳-宝安</option><option>上海安亭</option><option>宁波慈溪</option>
+      <option>重庆</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>驾驶车辆车牌号 <span class="required">*</span></label>
+    <input type="text" name="plate" required placeholder="如：皖B05583D">
+  </div>
+
+  <div class="form-group">
+    <label>车辆版本</label>
+    <select name="version">
+      <option value="">请选择</option>
+      <option>V1.0</option><option>V1.1</option><option>V1.2</option>
+      <option>V1.3</option><option>V2.0</option><option>V2.1</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>产品类型</label>
+    <select name="productType">
+      <option value="">请选择</option>
+      <option>扫车-P1</option><option>扫车-P2</option><option>扫车-P3</option><option>扫车-P4</option>
+      <option>水车-P1</option><option>水车-P2</option><option>水车-P3</option><option>水车-P4</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>底盘厂家</label>
+    <div class="radio-group" data-name="chassis">
+      <label class="radio-item"><input type="radio" name="chassis" value="东风">东风</label>
+      <label class="radio-item"><input type="radio" name="chassis" value="解放">解放</label>
+      <label class="radio-item"><input type="radio" name="chassis" value="陕汽">陕汽</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>累计驾驶该车时长</label>
+    <div class="radio-group" data-name="driveDuration">
+      <label class="radio-item"><input type="radio" name="driveDuration" value="1个月以内">1个月以内</label>
+      <label class="radio-item"><input type="radio" name="driveDuration" value="1-3个月">1-3个月</label>
+      <label class="radio-item"><input type="radio" name="driveDuration" value="3-6个月">3-6个月</label>
+      <label class="radio-item"><input type="radio" name="driveDuration" value="6个月以上">6个月以上</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>每日平均作业时长</label>
+    <div class="radio-group" data-name="dailyHours">
+      <label class="radio-item"><input type="radio" name="dailyHours" value="4小时以内">4小时以内</label>
+      <label class="radio-item"><input type="radio" name="dailyHours" value="4-6小时">4-6小时</label>
+      <label class="radio-item"><input type="radio" name="dailyHours" value="6-8小时">6-8小时</label>
+      <label class="radio-item"><input type="radio" name="dailyHours" value="8小时以上">8小时以上</label>
+    </div>
+  </div>
+</div>
+
+<!-- ====== 二、驾驶操控体验 ====== -->
+<div class="section">
+  <div class="section-title"><span class="icon">🕹️</span>二、驾驶操控体验</div>
+
+  <div class="form-group">
+    <label>1. 车辆起步平顺性（有无顿挫、窜动）</label>
+    <div class="rating-group" data-name="q1">
+      <label class="rating-item"><input type="radio" name="q1" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q1" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q1" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q1" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q1" value="1">很差</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>2. 行驶过程中加速/减速的平顺性</label>
+    <div class="rating-group" data-name="q2">
+      <label class="rating-item"><input type="radio" name="q2" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q2" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q2" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q2" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q2" value="1">很差</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>3. 方向盘转向力度与操控手感</label>
+    <div class="rating-group" data-name="q3">
+      <label class="rating-item"><input type="radio" name="q3" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q3" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q3" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q3" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q3" value="1">很差</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>4. 制动（刹车）灵敏度与脚感</label>
+    <div class="rating-group" data-name="q4">
+      <label class="rating-item"><input type="radio" name="q4" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q4" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q4" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q4" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q4" value="1">很差</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>5. 车辆行驶稳定性（高速/低速）</label>
+    <div class="rating-group" data-name="q5">
+      <label class="rating-item"><input type="radio" name="q5" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q5" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q5" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q5" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q5" value="1">很差</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>6. 低速行进间扫盘/滚扫启停切换的平顺性</label>
+    <div class="rating-group" data-name="q6">
+      <label class="rating-item"><input type="radio" name="q6" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q6" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q6" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q6" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q6" value="1">很差</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>7. 靠边贴边作业时的视野与操控便利性</label>
+    <div class="rating-group" data-name="q7">
+      <label class="rating-item"><input type="radio" name="q7" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q7" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q7" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q7" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q7" value="1">很差</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>8. 倒车作业时的视野与操控感受</label>
+    <div class="rating-group" data-name="q8">
+      <label class="rating-item"><input type="radio" name="q8" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q8" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q8" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q8" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q8" value="1">很差</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>9. 坡道作业时车辆的动力表现</label>
+    <div class="rating-group" data-name="q9">
+      <label class="rating-item"><input type="radio" name="q9" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q9" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q9" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q9" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q9" value="1">很差</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>10. 狭窄路段作业时车辆通过性</label>
+    <div class="rating-group" data-name="q10">
+      <label class="rating-item"><input type="radio" name="q10" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q10" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q10" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q10" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q10" value="1">很差</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>11. 您在驾驶过程中遇到过哪些操控不便或异常的情况？</label>
+    <textarea name="q11" placeholder="请详细描述发生场景..."></textarea>
+  </div>
+
+  <div class="form-group">
+    <label>12. 是否有出现过车辆响应延迟或"不听使唤"的情况？</label>
+    <textarea name="q12" placeholder="请描述..."></textarea>
+  </div>
+</div>
+
+<!-- ====== 三、上装功能操作体验 ====== -->
+<div class="section">
+  <div class="section-title"><span class="icon">⚙️</span>三、上装功能操作体验</div>
+
+  <p style="font-weight:600;color:#1a73e8;margin-bottom:8px;">🔹 扫盘与滚扫系统</p>
+
+  <div class="form-group">
+    <label>13. 扫盘/滚扫升降操作的响应速度</label>
+    <div class="rating-group" data-name="q13">
+      <label class="rating-item"><input type="radio" name="q13" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q13" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q13" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q13" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q13" value="1">很差</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>14. 扫盘转速调节的便利性与准确性</label>
+    <div class="rating-group" data-name="q14">
+      <label class="rating-item"><input type="radio" name="q14" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q14" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q14" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q14" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q14" value="1">很差</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>15. 扫盘磨损更换的便捷程度</label>
+    <div class="rating-group" data-name="q15">
+      <label class="rating-item"><input type="radio" name="q15" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q15" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q15" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q15" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q15" value="1">很差</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>16. 清扫效果是否达到预期</label>
+    <div class="rating-group" data-name="q16">
+      <label class="rating-item"><input type="radio" name="q16" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q16" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q16" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q16" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q16" value="1">很差</label>
+    </div>
+  </div>
+
+  <p style="font-weight:600;color:#1a73e8;margin-bottom:8px;">🔹 水路与降尘系统</p>
+
+  <div class="form-group">
+    <label>17. 高压/低压水路切换的便利性</label>
+    <div class="rating-group" data-name="q17">
+      <label class="rating-item"><input type="radio" name="q17" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q17" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q17" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q17" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q17" value="1">很差</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>18. 喷淋/降尘效果是否满足作业需求</label>
+    <div class="rating-group" data-name="q18">
+      <label class="rating-item"><input type="radio" name="q18" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q18" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q18" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q18" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q18" value="1">很差</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>19. 清水箱加水操作的便捷性</label>
+    <div class="rating-group" data-name="q19">
+      <label class="rating-item"><input type="radio" name="q19" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q19" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q19" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q19" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q19" value="1">很差</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>20. 水管/接头连接的便利性</label>
+    <div class="rating-group" data-name="q20">
+      <label class="rating-item"><input type="radio" name="q20" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q20" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q20" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q20" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q20" value="1">很差</label>
+    </div>
+  </div>
+
+  <p style="font-weight:600;color:#1a73e8;margin-bottom:8px;">🔹 风机与吸拾系统</p>
+
+  <div class="form-group">
+    <label>21. 风机启动/停止的响应速度</label>
+    <div class="rating-group" data-name="q21">
+      <label class="rating-item"><input type="radio" name="q21" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q21" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q21" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q21" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q21" value="1">很差</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>22. 吸拾效果是否满足需求（有无漏吸、扬尘）</label>
+    <div class="rating-group" data-name="q22">
+      <label class="rating-item"><input type="radio" name="q22" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q22" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q22" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q22" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q22" value="1">很差</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>23. 风机噪音水平能否接受</label>
+    <div class="rating-group" data-name="q23">
+      <label class="rating-item"><input type="radio" name="q23" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q23" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q23" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q23" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q23" value="1">很差</label>
+    </div>
+  </div>
+
+  <p style="font-weight:600;color:#1a73e8;margin-bottom:8px;">🔹 垃圾箱与排污系统</p>
+
+  <div class="form-group">
+    <label>24. 垃圾箱举升/下降操作的便利性</label>
+    <div class="rating-group" data-name="q24">
+      <label class="rating-item"><input type="radio" name="q24" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q24" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q24" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q24" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q24" value="1">很差</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>25. 垃圾箱排污/卸料操作的便捷性</label>
+    <div class="rating-group" data-name="q25">
+      <label class="rating-item"><input type="radio" name="q25" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q25" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q25" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q25" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q25" value="1">很差</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>26. 垃圾箱容量是否满足一班次作业需求</label>
+    <div class="rating-group" data-name="q26">
+      <label class="rating-item"><input type="radio" name="q26" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q26" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q26" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q26" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q26" value="1">很差</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>27. 上装功能（扫盘/水路/风机/垃圾箱）遇到过哪些故障或异常？</label>
+    <textarea name="q27" placeholder="请列出..."></textarea>
+  </div>
+
+  <div class="form-group">
+    <label>28. 哪些上装操作步骤感觉特别繁琐或耗时？</label>
+    <textarea name="q28" placeholder="请描述..."></textarea>
+  </div>
+</div>
+
+<!-- ====== 四、人机交互与座舱体验 ====== -->
+<div class="section">
+  <div class="section-title"><span class="icon">🖥️</span>四、人机交互与座舱体验</div>
+
+  <div class="form-group">
+    <label>29. 中控屏幕/仪表盘信息显示清晰度</label>
+    <div class="rating-group" data-name="q29">
+      <label class="rating-item"><input type="radio" name="q29" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q29" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q29" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q29" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q29" value="1">很差</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>30. 各功能按键布局的合理性（是否顺手）</label>
+    <div class="rating-group" data-name="q30">
+      <label class="rating-item"><input type="radio" name="q30" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q30" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q30" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q30" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q30" value="1">很差</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>31. 触摸屏操作灵敏度与准确性</label>
+    <div class="rating-group" data-name="q31">
+      <label class="rating-item"><input type="radio" name="q31" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q31" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q31" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q31" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q31" value="1">很差</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>32. 系统报警/提示信息是否清晰易懂</label>
+    <div class="rating-group" data-name="q32">
+      <label class="rating-item"><input type="radio" name="q32" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q32" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q32" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q32" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q32" value="1">很差</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>33. 座椅舒适度（长时间作业后）</label>
+    <div class="rating-group" data-name="q33">
+      <label class="rating-item"><input type="radio" name="q33" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q33" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q33" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q33" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q33" value="1">很差</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>34. 空调/暖风效果</label>
+    <div class="rating-group" data-name="q34">
+      <label class="rating-item"><input type="radio" name="q34" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q34" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q34" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q34" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q34" value="1">很差</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>35. 驾驶室隔音降噪水平</label>
+    <div class="rating-group" data-name="q35">
+      <label class="rating-item"><input type="radio" name="q35" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q35" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q35" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q35" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q35" value="1">很差</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>36. 驾驶室空间与视野开阔感</label>
+    <div class="rating-group" data-name="q36">
+      <label class="rating-item"><input type="radio" name="q36" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q36" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q36" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q36" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q36" value="1">很差</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>37. 自动驾驶/辅助驾驶功能的可靠性（如配备）</label>
+    <div class="rating-group" data-name="q37">
+      <label class="rating-item"><input type="radio" name="q37" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q37" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q37" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q37" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q37" value="1">很差</label>
+      <label class="rating-item"><input type="radio" name="q37" value="0">未配备</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>38. 自动加水充电装置的便利性</label>
+    <div class="rating-group" data-name="q38">
+      <label class="rating-item"><input type="radio" name="q38" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q38" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q38" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q38" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q38" value="1">很差</label>
+      <label class="rating-item"><input type="radio" name="q38" value="0">未配备</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>39. 智能传感系统（避障/识别）的准确性</label>
+    <div class="rating-group" data-name="q39">
+      <label class="rating-item"><input type="radio" name="q39" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q39" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q39" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q39" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q39" value="1">很差</label>
+      <label class="rating-item"><input type="radio" name="q39" value="0">未配备</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>40. 您认为最需要改进的座舱/操控界面是哪一处？为什么？</label>
+    <textarea name="q40" placeholder="请描述..."></textarea>
+  </div>
+
+  <div class="form-group">
+    <label>41. 是否出现过误操作的情况（如按错按钮、看错提示）？</label>
+    <textarea name="q41" placeholder="请描述..."></textarea>
+  </div>
+</div>
+
+<!-- ====== 五、可靠性与故障体验 ====== -->
+<div class="section">
+  <div class="section-title"><span class="icon">🔧</span>五、可靠性与故障体验</div>
+
+  <div class="form-group">
+    <label>42. 作业过程中出现故障报警的频率</label>
+    <div class="rating-group" data-name="q42">
+      <label class="rating-item"><input type="radio" name="q42" value="5">从未</label>
+      <label class="rating-item"><input type="radio" name="q42" value="4">偶尔(月均1次)</label>
+      <label class="rating-item"><input type="radio" name="q42" value="3">经常(周均1次)</label>
+      <label class="rating-item"><input type="radio" name="q42" value="2">频繁(日均1次+)</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>43. 因车辆故障导致作业中断的频率</label>
+    <div class="rating-group" data-name="q43">
+      <label class="rating-item"><input type="radio" name="q43" value="5">从未</label>
+      <label class="rating-item"><input type="radio" name="q43" value="4">偶尔(月均1次)</label>
+      <label class="rating-item"><input type="radio" name="q43" value="3">经常(周均1次)</label>
+      <label class="rating-item"><input type="radio" name="q43" value="2">频繁(日均1次+)</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>44. 因上装设备故障无法完成当日任务的频率</label>
+    <div class="rating-group" data-name="q44">
+      <label class="rating-item"><input type="radio" name="q44" value="5">从未</label>
+      <label class="rating-item"><input type="radio" name="q44" value="4">偶尔(月均1次)</label>
+      <label class="rating-item"><input type="radio" name="q44" value="3">经常(周均1次)</label>
+      <label class="rating-item"><input type="radio" name="q44" value="2">频繁(日均1次+)</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>45. 遇到过以下哪些类型的故障？（可多选）</label>
+    <div class="checkbox-group" data-name="q45">
+      <label class="checkbox-item"><input type="checkbox" name="q45" value="电气系统故障">电气系统</label>
+      <label class="checkbox-item"><input type="checkbox" name="q45" value="液压系统故障">液压系统</label>
+      <label class="checkbox-item"><input type="checkbox" name="q45" value="水路系统故障">水路系统</label>
+      <label class="checkbox-item"><input type="checkbox" name="q45" value="清扫机构故障">清扫机构</label>
+      <label class="checkbox-item"><input type="checkbox" name="q45" value="风机系统故障">风机系统</label>
+      <label class="checkbox-item"><input type="checkbox" name="q45" value="制动系统故障">制动系统</label>
+      <label class="checkbox-item"><input type="checkbox" name="q45" value="底盘传动故障">底盘/传动</label>
+      <label class="checkbox-item"><input type="checkbox" name="q45" value="高压电气故障">高压电气</label>
+      <label class="checkbox-item"><input type="checkbox" name="q45" value="智能系统故障">智能系统</label>
+    </div>
+    <input type="text" name="q45_other" placeholder="其他故障类型（请补充）" style="margin-top:8px;">
+  </div>
+
+  <div class="form-group">
+    <label>46. 故障率最高的系统或部件是什么？请描述具体故障现象：</label>
+    <textarea name="q46" placeholder="请描述..."></textarea>
+  </div>
+</div>
+
+<!-- ====== 六、维护与日常检查 ====== -->
+<div class="section">
+  <div class="section-title"><span class="icon">🛠️</span>六、维护与日常检查</div>
+
+  <div class="form-group">
+    <label>47. 每日出车前检查项目的合理性（是否太繁琐）</label>
+    <div class="rating-group" data-name="q47">
+      <label class="rating-item"><input type="radio" name="q47" value="5">很合理</label>
+      <label class="rating-item"><input type="radio" name="q47" value="4">较合理</label>
+      <label class="rating-item"><input type="radio" name="q47" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q47" value="2">较繁琐</label>
+      <label class="rating-item"><input type="radio" name="q47" value="1">太繁琐</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>48. 易损件更换的便捷性（扫盘、滤网等）</label>
+    <div class="rating-group" data-name="q48">
+      <label class="rating-item"><input type="radio" name="q48" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q48" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q48" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q48" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q48" value="1">很差</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>49. 日常清洁/清洗车辆的便利性</label>
+    <div class="rating-group" data-name="q49">
+      <label class="rating-item"><input type="radio" name="q49" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q49" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q49" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q49" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q49" value="1">很差</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>50. 加注黄油/润滑操作的便利性</label>
+    <div class="rating-group" data-name="q50">
+      <label class="rating-item"><input type="radio" name="q50" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q50" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q50" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q50" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q50" value="1">很差</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>51. 日常维护中最头疼的操作是什么？</label>
+    <textarea name="q51" placeholder="请描述..."></textarea>
+  </div>
+</div>
+
+<!-- ====== 七、安全感受 ====== -->
+<div class="section">
+  <div class="section-title"><span class="icon">🛡️</span>七、安全感受</div>
+
+  <div class="form-group">
+    <label>52. 车辆整体制动安全性感受</label>
+    <div class="rating-group" data-name="q52">
+      <label class="rating-item"><input type="radio" name="q52" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q52" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q52" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q52" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q52" value="1">很差</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>53. 夜间/雨天作业视野与灯光照明</label>
+    <div class="rating-group" data-name="q53">
+      <label class="rating-item"><input type="radio" name="q53" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q53" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q53" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q53" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q53" value="1">很差</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>54. 高压电气系统安全防护感受</label>
+    <div class="rating-group" data-name="q54">
+      <label class="rating-item"><input type="radio" name="q54" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q54" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q54" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q54" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q54" value="1">很差</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>55. 紧急情况下（如设备失控）的应急操作便利性</label>
+    <div class="rating-group" data-name="q55">
+      <label class="rating-item"><input type="radio" name="q55" value="5">很好</label>
+      <label class="rating-item"><input type="radio" name="q55" value="4">较好</label>
+      <label class="rating-item"><input type="radio" name="q55" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q55" value="2">较差</label>
+      <label class="rating-item"><input type="radio" name="q55" value="1">很差</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>56. 是否遇到过安全相关的事故或险情？请描述当时情况：</label>
+    <textarea name="q56" placeholder="请描述..."></textarea>
+  </div>
+</div>
+
+<!-- ====== 八、综合满意度 ====== -->
+<div class="section">
+  <div class="section-title"><span class="icon">⭐</span>八、综合满意度与建议</div>
+
+  <div class="form-group">
+    <label>57. 对T18扫车的整体使用满意度</label>
+    <div class="rating-group" data-name="q57">
+      <label class="rating-item"><input type="radio" name="q57" value="5">很满意</label>
+      <label class="rating-item"><input type="radio" name="q57" value="4">满意</label>
+      <label class="rating-item"><input type="radio" name="q57" value="3">一般</label>
+      <label class="rating-item"><input type="radio" name="q57" value="2">不满意</label>
+      <label class="rating-item"><input type="radio" name="q57" value="1">很不满意</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>58. 相比您驾驶过的其他环卫车辆，T18的表现</label>
+    <div class="rating-group" data-name="q58">
+      <label class="rating-item"><input type="radio" name="q58" value="5">好很多</label>
+      <label class="rating-item"><input type="radio" name="q58" value="4">好一些</label>
+      <label class="rating-item"><input type="radio" name="q58" value="3">差不多</label>
+      <label class="rating-item"><input type="radio" name="q58" value="2">差一些</label>
+      <label class="rating-item"><input type="radio" name="q58" value="1">差很多</label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>59. 给V2.1版本提3个最希望改进的地方（按优先级）：</label>
+    <textarea name="q59" placeholder="①&#10;②&#10;③" style="min-height:100px;"></textarea>
+  </div>
+
+  <div class="form-group">
+    <label>60. 作业中是否自行"发明"了土办法来应对车辆不便？这对研发很有启发：</label>
+    <textarea name="q60" placeholder="请描述..."></textarea>
+  </div>
+
+  <div class="form-group">
+    <label>61. 其他想对研发团队说的话（吐槽/建议/表扬均可）：</label>
+    <textarea name="q61" placeholder="畅所欲言..."></textarea>
+  </div>
+</div>
+
+</form>
+
+<div class="submit-bar">
+  <button class="btn btn-secondary" onclick="saveDraft()">💾 暂存</button>
+  <button class="btn btn-primary" onclick="submitForm()">📤 提交问卷</button>
+</div>
+
+<div class="progress" id="progress"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+// Load saved draft
+const DRAFT_KEY = 't18_survey_draft';
+(function loadDraft() {
+  try {
+    const draft = JSON.parse(localStorage.getItem(DRAFT_KEY));
+    if (!draft) return;
+    for (const [name, value] of Object.entries(draft)) {
+      if (name.startsWith('q45') && name !== 'q45_other') continue; // skip checkbox
+      const el = document.querySelector(`[name="${name}"]`);
+      if (!el) continue;
+      if (el.type === 'radio') {
+        const rb = document.querySelector(`[name="${name}"][value="${value}"]`);
+        if (rb) rb.checked = true;
+      } else if (el.type === 'checkbox') {
+        // handled below
+      } else {
+        el.value = value;
+      }
+    }
+    // Checkboxes
+    if (draft['q45_values']) {
+      draft['q45_values'].forEach(v => {
+        const cb = document.querySelector(`[name="q45"][value="${v}"]`);
+        if (cb) cb.checked = true;
+      });
+    }
+    updateProgress();
+  } catch(e) {}
+})();
+
+function saveDraft() {
+  const form = document.getElementById('surveyForm');
+  const fd = new FormData(form);
+  const draft = {};
+  for (const [k, v] of fd.entries()) {
+    if (k === 'q45') {
+      if (!draft['q45_values']) draft['q45_values'] = [];
+      draft['q45_values'].push(v);
+    } else {
+      draft[k] = v;
+    }
+  }
+  localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+  showToast('✅ 已暂存，刷新页面可恢复');
+}
+
+function submitForm() {
+  const form = document.getElementById('surveyForm');
+  const fd = new FormData(form);
+  const data = {};
+  for (const [k, v] of fd.entries()) {
+    if (k === 'q45') {
+      if (!data[k]) data[k] = [];
+      data[k].push(v);
+    } else {
+      data[k] = v;
+    }
+  }
+
+  // Validate required
+  if (!data['name'] || !data['project'] || !data['plate']) {
+    showToast('⚠️ 请填写姓名、项目和车牌号');
+    return;
+  }
+
+  // Build CSV
+  const fields = ['name','project','plate','version','productType','chassis','driveDuration','dailyHours'];
+  for (let i=1; i<=61; i++) fields.push('q'+i);
+  fields.push('q45_other');
+
+  let csv = '﻿' + fields.join(',') + '\n';
+  const row = fields.map(f => {
+    let val = data[f];
+    if (Array.isArray(val)) val = val.join(';');
+    if (!val) val = '';
+    val = String(val).replace(/"/g, '""').replace(/\n/g, ' ');
+    return '"' + val + '"';
+  });
+  csv += row.join(',');
+
+  // Download CSV
+  const blob = new Blob([csv], {type: 'text/csv;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'T18_V21_调查_' + (data['name'] || 'unknown') + '_' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+
+  // Also copy to clipboard as backup
+  const textReport = buildTextReport(data);
+  navigator.clipboard?.writeText(textReport).catch(()=>{});
+
+  localStorage.removeItem(DRAFT_KEY);
+  showToast('✅ 提交成功！CSV已下载\n数据也已复制到剪贴板');
+  updateProgress();
+}
+
+function buildTextReport(data) {
+  let r = 'T18 V2.1 调查问卷 - ' + (data['name']||'') + '\n';
+  r += '='.repeat(40) + '\n';
+  for (const [k,v] of Object.entries(data)) {
+    if (!v || (Array.isArray(v) && v.length===0)) continue;
+    const keyMap = {
+      name:'姓名',project:'项目',plate:'车牌号',version:'车辆版本',productType:'产品类型',
+      chassis:'底盘',driveDuration:'驾驶时长',dailyHours:'日均作业',
+      q1:'起步平顺性',q2:'加减速平顺性',q3:'转向手感',q4:'制动灵敏度',q5:'行驶稳定性',
+      q6:'扫盘启停平顺',q7:'贴边视野',q8:'倒车视野',q9:'坡道动力',q10:'狭窄通过性',
+      q11:'驾驶异常',q12:'响应延迟',
+      q13:'扫盘升降响应',q14:'扫盘转速',q15:'扫盘更换',q16:'清扫效果',
+      q17:'水路切换',q18:'降尘效果',q19:'加水便捷',q20:'水管连接',
+      q21:'风机响应',q22:'吸拾效果',q23:'风机噪音',
+      q24:'垃圾箱举升',q25:'排污卸料',q26:'垃圾箱容量',
+      q27:'上装故障',q28:'繁琐操作',
+      q29:'中控清晰度',q30:'按键布局',q31:'触屏灵敏',q32:'报警清晰',
+      q33:'座椅舒适',q34:'空调效果',q35:'隔音降噪',q36:'空间视野',
+      q37:'自动驾驶',q38:'自动加水充电',q39:'智能传感',
+      q40:'座舱改进',q41:'误操作',
+      q42:'故障报警频率',q43:'故障中断频率',q44:'无法完成任务频率',
+      q45:'故障类型',q45_other:'其他故障',q46:'最高故障部件',
+      q47:'出车检查',q48:'易损件更换',q49:'车辆清洁',q50:'润滑操作',q51:'维护痛点',
+      q52:'制动安全',q53:'夜间照明',q54:'高压防护',q55:'应急操作',q56:'安全事故',
+      q57:'整体满意度',q58:'对比其他车',q59:'Top3改进',q60:'土办法',q61:'其他建议'
+    };
+    r += (keyMap[k]||k) + ': ' + (Array.isArray(v)?v.join(', '):v) + '\n';
+  }
+  return r;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.style.display = 'block';
+  setTimeout(() => t.style.display = 'none', 2500);
+}
+
+function updateProgress() {
+  const form = document.getElementById('surveyForm');
+  const inputs = form.querySelectorAll('input, textarea, select');
+  let total = 0, filled = 0;
+  inputs.forEach(el => {
+    if (el.type === 'radio' || el.type === 'checkbox') return;
+    total++;
+    if (el.value) filled++;
+  });
+  // Count radio groups
+  const radioGroups = new Set();
+  form.querySelectorAll('input[type="radio"]').forEach(r => radioGroups.add(r.name));
+  radioGroups.forEach(name => {
+    total++;
+    if (form.querySelector(`input[name="${name}"]:checked`)) filled++;
+  });
+  // Count checkbox groups
+  const cbGroups = new Set();
+  form.querySelectorAll('input[type="checkbox"]').forEach(c => cbGroups.add(c.name));
+  cbGroups.forEach(name => {
+    total++;
+    if (form.querySelector(`input[name="${name}"]:checked`)) filled++;
+  });
+  document.getElementById('progress').textContent =
+    `填写进度：${Math.round(filled/total*100)}% (${filled}/${total})`;
+}
+
+// Auto-save on change
+document.getElementById('surveyForm').addEventListener('change', () => {
+  updateProgress();
+  // Auto-save ratings
+  const fd = new FormData(document.getElementById('surveyForm'));
+  const draft = {};
+  for (const [k, v] of fd.entries()) {
+    if (k === 'q45') {
+      if (!draft['q45_values']) draft['q45_values'] = [];
+      draft['q45_values'].push(v);
+    } else {
+      draft[k] = v;
+    }
+  }
+  localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+});
+
+updateProgress();
+</script>
+</body>
+</html>
