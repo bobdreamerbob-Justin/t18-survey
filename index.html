@@ -100,7 +100,9 @@ table.info-table input, table.info-table select { font-size: 13px; padding: 6px 
   <p>使用层面问题调查</p>
 </div>
 
-<form id="surveyForm">
+<form id="surveyForm" name="t18-survey" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+  <input type="hidden" name="form-name" value="t18-survey">
+  <p style="display:none;"><input name="bot-field"></p>
 
 <!-- ====== 一、基本信息 ====== -->
 <div class="section">
@@ -881,7 +883,7 @@ function saveDraft() {
   showToast('✅ 已暂存，刷新页面可恢复');
 }
 
-function submitForm() {
+async function submitForm() {
   const form = document.getElementById('surveyForm');
   const fd = new FormData(form);
   const data = {};
@@ -900,37 +902,84 @@ function submitForm() {
     return;
   }
 
-  // Build CSV
-  const fields = ['name','project','plate','version','productType','chassis','driveDuration','dailyHours'];
-  for (let i=1; i<=61; i++) fields.push('q'+i);
-  fields.push('q45_other');
+  // Show submitting state
+  const submitBtn = document.querySelector('.btn-primary');
+  submitBtn.textContent = '提交中...';
+  submitBtn.disabled = true;
 
-  let csv = '﻿' + fields.join(',') + '\n';
-  const row = fields.map(f => {
-    let val = data[f];
-    if (Array.isArray(val)) val = val.join(';');
-    if (!val) val = '';
-    val = String(val).replace(/"/g, '""').replace(/\n/g, ' ');
-    return '"' + val + '"';
-  });
-  csv += row.join(',');
+  try {
+    // Submit to Netlify Forms (central data collection)
+    const netlifyFd = new FormData(form);
+    const resp = await fetch('/', {
+      method: 'POST',
+      headers: { 'Accept': 'application/json' },
+      body: netlifyFd
+    });
 
-  // Download CSV
-  const blob = new Blob([csv], {type: 'text/csv;charset=utf-8'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'T18_V21_调查_' + (data['name'] || 'unknown') + '_' + new Date().toISOString().slice(0,10) + '.csv';
-  a.click();
-  URL.revokeObjectURL(url);
+    if (resp.ok) {
+      // Also generate CSV for local backup
+      const fields = ['name','project','plate','version','productType','chassis','driveDuration','dailyHours'];
+      for (let i=1; i<=61; i++) fields.push('q'+i);
+      fields.push('q45_other');
 
-  // Also copy to clipboard as backup
-  const textReport = buildTextReport(data);
-  navigator.clipboard?.writeText(textReport).catch(()=>{});
+      let csv = '﻿' + fields.join(',') + '\n';
+      const row = fields.map(f => {
+        let val = data[f];
+        if (Array.isArray(val)) val = val.join(';');
+        if (!val) val = '';
+        val = String(val).replace(/"/g, '""').replace(/\n/g, ' ');
+        return '"' + val + '"';
+      });
+      csv += row.join(',');
 
-  localStorage.removeItem(DRAFT_KEY);
-  showToast('✅ 提交成功！CSV已下载\n数据也已复制到剪贴板');
-  updateProgress();
+      // Download CSV as backup
+      const blob = new Blob([csv], {type: 'text/csv;charset=utf-8'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'T18_调查_' + (data['name'] || 'unknown') + '_' + new Date().toISOString().slice(0,10) + '.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+
+      localStorage.removeItem(DRAFT_KEY);
+      showToast('✅ 提交成功！感谢您的反馈');
+      form.reset();
+      updateProgress();
+    } else {
+      throw new Error('Submit failed');
+    }
+  } catch(e) {
+    // Fallback: download CSV locally
+    const fields = ['name','project','plate','version','productType','chassis','driveDuration','dailyHours'];
+    for (let i=1; i<=61; i++) fields.push('q'+i);
+    fields.push('q45_other');
+
+    let csv = '﻿' + fields.join(',') + '\n';
+    const row = fields.map(f => {
+      let val = data[f];
+      if (Array.isArray(val)) val = val.join(';');
+      if (!val) val = '';
+      val = String(val).replace(/"/g, '""').replace(/\n/g, ' ');
+      return '"' + val + '"';
+    });
+    csv += row.join(',');
+
+    const blob = new Blob([csv], {type: 'text/csv;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'T18_调查_' + (data['name'] || 'unknown') + '_' + new Date().toISOString().slice(0,10) + '.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+
+    const textReport = buildTextReport(data);
+    navigator.clipboard?.writeText(textReport).catch(()=>{});
+    localStorage.removeItem(DRAFT_KEY);
+    showToast('⚠️ 在线提交异常，CSV已下载\n请将文件发给项目经理汇总');
+  }
+
+  submitBtn.textContent = '📤 提交问卷';
+  submitBtn.disabled = false;
 }
 
 function buildTextReport(data) {
